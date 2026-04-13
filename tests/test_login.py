@@ -71,4 +71,22 @@ def test_locked_out_user(driver):
     error_text = login_page.get_error_text()
 
     assert "Sorry, this user has been locked out." in error_text
-    assert "inventory" not in driver.current_url    
+    assert "inventory" not in driver.current_url 
+
+def test_successful_login(driver):
+    login_page = LoginPage(driver)
+
+    login_page.open()
+    login_page.login("standard_user", "secret_sauce")
+
+    assert "inventory" in driver.current_url
+
+def test_inventory_page_is_visible(driver):
+    login_page = LoginPage(driver)
+
+    login_page.open()
+    login_page.login("standard_user", "secret_sauce")
+
+    title = driver.find_element(By.CLASS_NAME, "title").text
+
+    assert title == "Products"
